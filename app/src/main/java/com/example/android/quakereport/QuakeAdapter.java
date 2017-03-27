@@ -22,6 +22,11 @@ public class QuakeAdapter extends ArrayAdapter<Earthquake> {
         super(context, 0, earthquakes);
     }
 
+    private String[] splitLocation(String location){
+        String[] separated = location.split("of");
+        return separated;
+    }
+
     @NonNull
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
@@ -38,9 +43,22 @@ public class QuakeAdapter extends ArrayAdapter<Earthquake> {
         TextView magnitude = (TextView) listItemView.findViewById(R.id.magnitude);
         magnitude.setText(earthquake.getMagnitude());
 
-        // Set Location Text
+        // Get location text and split it
+        String locationText = earthquake.getLocation();
+        String[] locationAndOffset = splitLocation(locationText);
+
+        // Set Location and Offset Text
+        TextView locationOffset = (TextView) listItemView.findViewById(R.id.locationOffset);
         TextView location = (TextView) listItemView.findViewById(R.id.location);
-        location.setText(earthquake.getLocation());
+
+        if (locationAndOffset.length == 1) {
+            locationOffset.setText("Near the");
+            location.setText(locationAndOffset[0]);
+        }
+        else {
+            locationOffset.setText(locationAndOffset[0] + " of");
+            location.setText(locationAndOffset[1]);
+        }
 
         // Set shared variables for date and time
         long tstamp = earthquake.getTime();
