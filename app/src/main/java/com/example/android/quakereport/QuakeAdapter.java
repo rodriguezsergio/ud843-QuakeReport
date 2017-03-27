@@ -23,7 +23,7 @@ public class QuakeAdapter extends ArrayAdapter<Earthquake> {
     }
 
     private String[] splitLocation(String location){
-        String[] separated = location.split("of");
+        String[] separated = location.split(" of ");
         return separated;
     }
 
@@ -52,11 +52,12 @@ public class QuakeAdapter extends ArrayAdapter<Earthquake> {
         TextView location = (TextView) listItemView.findViewById(R.id.location);
 
         if (locationAndOffset.length == 1) {
-            locationOffset.setText("Near the");
+            locationOffset.setText(getContext().getString(R.string.near_the));
             location.setText(locationAndOffset[0]);
         }
         else {
-            locationOffset.setText(locationAndOffset[0] + " of");
+            String fullText = locationAndOffset[0] + " of";
+            locationOffset.setText(fullText);
             location.setText(locationAndOffset[1]);
         }
 
