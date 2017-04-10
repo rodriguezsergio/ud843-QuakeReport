@@ -57,7 +57,7 @@ public final class QueryUtils {
                 JSONObject properties = equakeItem.getJSONObject("properties");
 
                 String place = properties.getString("place");
-                String magnitude = properties.getString("mag");
+                double magnitude = properties.getDouble("mag");
                 long time = properties.getLong("time");
 
                 /*Date dateObject = new Date(time);
