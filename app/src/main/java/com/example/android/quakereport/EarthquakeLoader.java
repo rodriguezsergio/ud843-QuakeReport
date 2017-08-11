@@ -35,8 +35,3 @@ public class EarthquakeLoader extends AsyncTaskLoader<List<Earthquake>> {
         return earthquakes;
     }
 }
-
-
-
-
-
