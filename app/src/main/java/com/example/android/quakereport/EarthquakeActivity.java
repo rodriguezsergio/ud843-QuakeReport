@@ -16,8 +16,11 @@
 package com.example.android.quakereport;
 
 import android.app.LoaderManager;
+import android.content.Context;
 import android.content.Intent;
 import android.content.Loader;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -39,6 +42,11 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     private QuakeAdapter itemsAdapter;
     private static final int EARTHQUAKE_LOADER_ID = 1;
     private TextView mEmptyView;
+
+    private void hideLoadingSpinner () {
+        ProgressBar spinner = (ProgressBar) findViewById(R.id.loading_spinner);
+        spinner.setVisibility(View.GONE);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -70,7 +78,17 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
             }
         });
 
-        getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this);
+        ConnectivityManager cm =
+                (ConnectivityManager) getSystemService(Context.CONNECTIVITY_SERVICE);
+
+        NetworkInfo activeNetwork = cm.getActiveNetworkInfo();
+        if (activeNetwork != null && activeNetwork.isConnectedOrConnecting()) {
+            getLoaderManager().initLoader(EARTHQUAKE_LOADER_ID, null, this);
+        }
+        else {
+            mEmptyView.setText(R.string.no_connection);
+            hideLoadingSpinner();
+        }
     }
 
     @Override
@@ -82,8 +100,7 @@ public class EarthquakeActivity extends AppCompatActivity implements LoaderManag
     public void onLoadFinished(Loader<List<Earthquake>> loader, List<Earthquake> data) {
             itemsAdapter.clear();
 
-            ProgressBar spinner = (ProgressBar) findViewById(R.id.loading_spinner);
-            spinner.setVisibility(View.GONE);
+            hideLoadingSpinner();
 
             if (data != null && !data.isEmpty()) {
                 itemsAdapter.addAll(data);
