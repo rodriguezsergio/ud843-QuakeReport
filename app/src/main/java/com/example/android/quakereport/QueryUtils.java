@@ -78,10 +78,6 @@ public final class QueryUtils {
                 long time = properties.getLong("time");
                 String url = properties.getString("url");
 
-                /*Date dateObject = new Date(time);
-                SimpleDateFormat dateFormatter = new SimpleDateFormat("MMM DD, yyyy hh:mm a");
-                String timestamp = dateFormatter.format(dateObject);*/
-
                 Earthquake equake = new Earthquake(place, magnitude, time, url);
                 earthquakes.add(equake);
             }
